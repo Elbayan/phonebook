@@ -1,54 +1,43 @@
 import pytest
+import random
 
-from storage.storage import add_entry
+import storage.storage
 
-def add_entry()
-# Очищаем STORAGE перед каждым тестом
-@pytest.fixture(autouse=True)
+
+@pytest.fixture()
 def clear_storage():
     global STORAGE
     STORAGE = []
 
 
-class
+def generate_name(lenght_name=9):
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    fake_name = ''.join(random.choice(alphabet) for _ in range(lenght_name))
+    return fake_name
 
 
-def test_insert():
-    # Проверка добавления записи
-    insert('Ivan', 'Ivanov', '1234567890')
-    assert len(list()) == 1
-    assert list()[0] == {'name': 'Ivan', 'surname': 'Ivanov', 'tel': '1234567890'}
+def add_entry(iter_count=5):
+    list_numbers = []
+    for _ in range(iter_count):
+        number = []
 
-def test_get_existing_record():
-    # Добавляем и проверяем получение записи
-    insert('Ivan', 'Ivanov', '1234567890')
-    record = get('1234567890')
-    assert record == {'name': 'Ivan', 'surname': 'Ivanov', 'tel': '1234567890'}
+        name = generate_name()
+        surname = generate_name()
+        while len(number) < 10:
+            number.append(random.randrange(10))
 
-def test_get_non_existing_record():
-    # Проверка получения записи, которая не существует
-    record = get('1111111111')
-    assert record is None
+        number = int(''.join(str(num) for num in number))
+        list_numbers.append(number)
 
-def test_list():
-    # Проверка получения всех записей
-    insert('Ivan', 'Ivanov', '1234567890')
-    insert('Petr', 'Petrov', '0987654321')
-    all_records = list()
-    assert len(all_records) == 2
-    assert all_records == [
-        {'name': 'Ivan', 'surname': 'Ivanov', 'tel': '1234567890'},
-        {'name': 'Petr', 'surname': 'Petrov', 'tel': '0987654321'}
-    ]
+        storage.storage.add_entry(name, surname, number)
 
-def test_delete_existing_record():
-    # Проверка удаления записи
-    insert('Ivan', 'Ivanov', '1234567890')
-    deleted_record = delete('1234567890')
-    assert deleted_record == {'name': 'Ivan', 'surname': 'Ivanov', 'tel': '1234567890'}
-    assert len(list()) == 0
 
-def test_delete_non_existing_record():
-    # Проверка удаления несуществующей записи
-    deleted_record = delete('1111111111')
-    assert deleted_record is None
+    return list_numbers
+
+def test_get_entry():
+
+    known_numbers = add_entry()
+    test_number = random.choice(known_numbers)
+    result = storage.storage.get_entry(test_number)
+
+    assert result is not None

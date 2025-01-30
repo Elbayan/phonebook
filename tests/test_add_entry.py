@@ -19,10 +19,12 @@ def generate_name(lenght_name=9):
 def test_add_entry():
     number = []
 
-    name = "".join(generate_name())
-    surname = "".join(generate_name())
+    name = generate_name()
+    surname = generate_name()
     while len(number) < 10:
         number.append(random.randrange(10))
+
+    number = ''.join(str(num) for num in number)
 
     test_collection = {
         'name': name,
